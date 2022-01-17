@@ -3,7 +3,8 @@
     "description": "",
     "dependencies": {
         "core": "*",
-        "radio": "*"
+        "radio": "*",
+        "callibot": "github:mkleinsb/pxt-callibot#v1.0.1"
     },
     "files": [
         "main.blocks",
