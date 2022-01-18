@@ -1,5 +1,3 @@
-let fahren = 0
-let Zeit = 0
 input.onButtonPressed(Button.A, function () {
     fahren = 1
     Zeit = 500
@@ -25,7 +23,15 @@ function überprüfSensor () {
         callibot.motorStop(KMotor.beide, KStop.Frei)
         callibot.setLed(KMotor.beide, KState.aus)
     }
+    if (callibot.entfernung(KEinheit.cm) < 20) {
+        fahren = 0
+        GegenstandImWeg = 1
+    }
 }
+let Zeit = 0
+let fahren = 0
+let GegenstandImWeg = 0
+GegenstandImWeg = 0
 basic.forever(function () {
     Zeit += -1
     if (Zeit > 0 && fahren == 1) {
@@ -33,5 +39,8 @@ basic.forever(function () {
     } else {
         callibot.motorStop(KMotor.beide, KStop.Frei)
         callibot.setLed(KMotor.beide, KState.aus)
+    }
+    if (GegenstandImWeg == 1 && callibot.entfernung(KEinheit.cm) > 20) {
+        fahren = 1
     }
 })
