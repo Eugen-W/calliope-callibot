@@ -31,8 +31,8 @@ Die Aktualisierung dieses Bildes kann einige Minuten dauern.
 <script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
 
 ### To do Liste
-1. Der Bot soll per knopf druck an und aus gemacht werden können
-2. Der Bot soll von der Mitte der Plane aus Starten können und wenn er den fetten Kreis trifft soll er entlang dieses Kreis fahren
-3. Der Bot soll automatisch nach einer bestimmten Zeit aufhören zu fahren
-4. Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht.
+- Der Bot soll per knopf druck an und aus gemacht werden können
+- Der Bot soll von der Mitte der Plane aus Starten können und wenn er den fetten Kreis trifft soll er entlang dieses Kreis fahren
+- Der Bot soll automatisch nach einer bestimmten Zeit aufhören zu fahren
+- Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht.
 
