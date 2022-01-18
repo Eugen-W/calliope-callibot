@@ -1,21 +1,23 @@
 let fahren = 0
+let Zeit = 0
 input.onButtonPressed(Button.A, function () {
     fahren = 1
+    Zeit = 500
 })
 input.onButtonPressed(Button.B, function () {
     fahren = 0
 })
 function überprüfSensor () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.beide, KDir.vorw&#228;rts, 100)
+        callibot.motor(KMotor.beide, KDir.vorwärts, 50)
         callibot.setLed(KMotor.beide, KState.an)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.links, KDir.vorw&#228;rts, 100)
+        callibot.motor(KMotor.links, KDir.vorwärts, 50)
         callibot.motorStop(KMotor.rechts, KStop.Frei)
         callibot.setLed(KMotor.links, KState.aus)
         callibot.setLed(KMotor.rechts, KState.an)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-        callibot.motor(KMotor.rechts, KDir.vorw&#228;rts, 100)
+        callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
         callibot.motorStop(KMotor.links, KStop.Frei)
         callibot.setLed(KMotor.rechts, KState.aus)
         callibot.setLed(KMotor.links, KState.an)
@@ -25,7 +27,8 @@ function überprüfSensor () {
     }
 }
 basic.forever(function () {
-    if (fahren == 1) {
+    Zeit += -1
+    if (Zeit > 0 && fahren == 1) {
         überprüfSensor()
     } else {
         callibot.motorStop(KMotor.beide, KStop.Frei)

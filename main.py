@@ -20,13 +20,19 @@ def überprüfSensor():
         callibot.set_led(KMotor.LINKS, KState.AUS)
         callibot.set_led(KMotor.RECHTS, KState.AN)
     elif callibot.read_line_sensor(KSensor.LINKS, KSensorStatus.DUNKEL) and callibot.read_line_sensor(KSensor.RECHTS, KSensorStatus.HELL):
-        callibot.motor(KMotor.RECHTS, KDir.VORWÄRTS, 100)
+        callibot.motor(KMotor.RECHTS, KDir.VORWÄRTS, 0)
         callibot.motor_stop(KMotor.LINKS, KStop.FREI)
         callibot.set_led(KMotor.RECHTS, KState.AUS)
         callibot.set_led(KMotor.LINKS, KState.AN)
     else:
         callibot.motor_stop(KMotor.BEIDE, KStop.FREI)
         callibot.set_led(KMotor.BEIDE, KState.AUS)
+def sucheLinie():
+    for index in range(10):
+        callibot.motor(KMotor.LINKS, KDir.VORWÄRTS, 50)
+        basic.pause(100)
+        callibot.motor(KMotor.RECHTS, KDir.VORWÄRTS, 50)
+        basic.pause(100)
 
 def on_forever():
     if fahren == 1:
