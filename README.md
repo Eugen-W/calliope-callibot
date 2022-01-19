@@ -34,5 +34,5 @@ Die Aktualisierung dieses Bildes kann einige Minuten dauern.
 - Der Bot soll per knopf druck an und aus gemacht werden können (erledigt)
 - Der Bot soll von der Mitte der Plane aus Starten können und wenn er den fetten Kreis trifft soll er entlang dieses Kreis fahren
 - Der Bot soll automatisch nach einer bestimmten Zeit aufhören zu fahren (erledigt)
-- Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht.
+- Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht. (erledigt)
 
