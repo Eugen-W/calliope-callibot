@@ -32,7 +32,7 @@ Die Aktualisierung dieses Bildes kann einige Minuten dauern.
 
 ### To do Liste
 - Der Bot soll per knopf druck an und aus gemacht werden können (erledigt)
-- Der Bot soll von der Mitte der Plane aus Starten können und wenn er den fetten Kreis trifft soll er entlang dieses Kreis fahren
+- Der Bot soll von der Mitte der Plane aus Starten können und wenn er den fetten Kreis trifft soll er entlang dieses Kreis fahren (erledigt)
 - Der Bot soll automatisch nach einer bestimmten Zeit aufhören zu fahren (erledigt)
 - Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht. (erledigt)
 
@@ -43,5 +43,5 @@ Timer der ab Knopfdruck von A läuft. Bei 0 ist der Timer abgelaufen und der Rob
 0 Bedeutet, dass der Roboter nicht fährt. Bei 1 fährt er. Kann Zurzeit über die Knöpfe A und B verämdert werden.
 ### kreisgefunden
 Wenn kreisgefunden auf 1 ist, beudeutet es, dass der Roboter sich endgültig auf dem Kreis befindet.
-###kreisTimer
+### kreisTimer
 Ein Timer, der startet, wenn die Sensoren auf einer dunklen Fläche sind. Wenn der Timer 0 ist, ist er abgelaufen.
