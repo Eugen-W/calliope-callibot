@@ -1,5 +1,6 @@
 function sucheKreis () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
+        kreisTimer += -1
         callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
         callibot.motorStop(KMotor.links, KStop.Bremsen)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
@@ -7,10 +8,15 @@ function sucheKreis () {
     } else {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
     }
+    if (kreisTimer == 0) {
+        kreisgefunden = 1
+    }
 }
 input.onButtonPressed(Button.A, function () {
     fahren = 1
     Zeit = 500
+    kreisgefunden = 0
+    kreisTimer = 75
 })
 function fahrenimkreis () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
@@ -40,12 +46,13 @@ input.onButtonPressed(Button.B, function () {
 })
 let Zeit = 0
 let fahren = 0
+let kreisgefunden = 0
+let kreisTimer = 0
 let GegenstandImWeg = 0
 GegenstandImWeg = 0
 basic.forever(function () {
     Zeit += -1
     if (Zeit > 0 && fahren == 1) {
-        let kreisgefunden = 0
         if (kreisgefunden == 1) {
             fahrenimkreis()
         } else if (kreisgefunden == 0) {
