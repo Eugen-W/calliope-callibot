@@ -36,14 +36,14 @@ Die Aktualisierung dieses Bildes kann einige Minuten dauern.
 - Der Bot soll automatisch nach einer bestimmten Zeit aufhören zu fahren (erledigt)
 - Der Bot soll anhalten, wenn ein Gegenstand vor ihm steht. (erledigt)
 
-##Variablen
-###Zeit
+## Variablen
+### Zeit
 Timer der ab Knopfdruck von A läuft. Bei 0 ist der Timer abgelaufen und der Roboter hält an.
-###fahren
+### fahren
 0 Bedeutet, dass der Roboter nicht fährt. Bei 1 fährt er. Kann Zurzeit über die Knöpfe A und B verämdert werden.
-###GegenstandImWeg
+### GegenstandImWeg
 Bei 1 steht ein Gegenstand im Weg
-###ReifenSeite
+### ReifenSeite
 Wird beim Suchen des Kreises benutzt. Bei 0 dreht sich das linke Rad alleine und bei 1 das rechte
-###ReifenZeit
+### ReifenZeit
 Wird beim Suchen des Kreises benutzt. Bei 0 ist die Zeit abgelaufen und das sich drehende Rad wird gewechselt
