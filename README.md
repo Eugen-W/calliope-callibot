@@ -41,9 +41,7 @@ Die Aktualisierung dieses Bildes kann einige Minuten dauern.
 Timer der ab Knopfdruck von A läuft. Bei 0 ist der Timer abgelaufen und der Roboter hält an.
 ### fahren
 0 Bedeutet, dass der Roboter nicht fährt. Bei 1 fährt er. Kann Zurzeit über die Knöpfe A und B verämdert werden.
-### GegenstandImWeg
-Bei 1 steht ein Gegenstand im Weg
-### ReifenSeite
-Wird beim Suchen des Kreises benutzt. Bei 0 dreht sich das linke Rad alleine und bei 1 das rechte
-### ReifenZeit
-Wird beim Suchen des Kreises benutzt. Bei 0 ist die Zeit abgelaufen und das sich drehende Rad wird gewechselt
+### kreisgefunden
+Wenn kreisgefunden auf 1 ist, beudeutet es, dass der Roboter sich endgültig auf dem Kreis befindet.
+###kreisTimer
+Ein Timer, der startet, wenn die Sensoren auf einer dunklen Fläche sind. Wenn der Timer 0 ist, ist er abgelaufen.
