@@ -7,6 +7,22 @@ function drehen () {
         drehenTimer = 35
     }
 }
+function verlassen () {
+    if (callibot.entfernung(KEinheit.cm) < 15) {
+        callibot.motorStop(KMotor.beide, KStop.Bremsen)
+    } else {
+        if (drehenTimer90Grad > 0) {
+            drehenTimer90Grad += -1
+            callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
+            callibot.motor(KMotor.links, KDir.vorwärts, 50)
+        } else if (verlassenTimer > 0) {
+            callibot.motor(KMotor.beide, KDir.vorwärts, 25)
+            verlassenTimer += -1
+        } else if (verlassenTimer <= 0) {
+            callibot.motorStop(KMotor.beide, KStop.Bremsen)
+        }
+    }
+}
 function sucheKreis () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         kreisTimer += -1
@@ -27,10 +43,12 @@ function sucheKreis () {
 }
 input.onButtonPressed(Button.A, function () {
     fahren = 1
-    Zeit = 1000
+    Zeit = 500
     status = 0
     kreisTimer = 75
     drehenTimer = 35
+    drehenTimer90Grad = 20
+    verlassenTimer = 50
 })
 function fahrenimkreis () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
@@ -47,19 +65,22 @@ function fahrenimkreis () {
         callibot.setLed(KMotor.rechts, KState.aus)
         callibot.setLed(KMotor.links, KState.an)
     } else {
-        callibot.motorStop(KMotor.beide, KStop.Frei)
-        callibot.setLed(KMotor.beide, KState.aus)
+        status = 0
+        kreisTimer += 75
     }
 }
 input.onButtonPressed(Button.B, function () {
     fahren = 0
 })
-let Zeit = 0
 let fahren = 0
 let kreisTimer = 0
+let verlassenTimer = 0
+let drehenTimer90Grad = 0
 let status = 0
 let drehenTimer = 0
+let Zeit = 0
 let GegenstandImWeg = 0
+Zeit = 500
 basic.forever(function () {
     Zeit += -1
     if (Zeit > 0 && fahren == 1) {
@@ -70,11 +91,11 @@ basic.forever(function () {
         } else if (status == 2) {
             drehen()
         }
-    } else {
-        callibot.motorStop(KMotor.beide, KStop.Frei)
-        callibot.setLed(KMotor.beide, KState.aus)
     }
     if (callibot.entfernung(KEinheit.cm) < 15) {
         status = 2
+    }
+    if (Zeit <= 0) {
+        verlassen()
     }
 })
