@@ -4,7 +4,7 @@ function drehen () {
     callibot.motor(KMotor.links, KDir.vorwärts, 50)
     if (drehenTimer == 0) {
         status = 0
-        kreisTimer = 75
+        drehenTimer = 35
     }
 }
 function sucheKreis () {
