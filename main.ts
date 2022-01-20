@@ -1,3 +1,14 @@
+function weißSuchen () {
+    if (drehenTimer == 0) {
+        callibot.motor(KMotor.beide, KDir.vorwärts, 0)
+    } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
+        status = 0
+    } else {
+        drehenTimer += -1
+        callibot.motor(KMotor.rechts, KDir.rückwärts, 30)
+        callibot.motor(KMotor.links, KDir.vorwärts, 30)
+    }
+}
 function drehen () {
     drehenTimer += -1
     callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
@@ -44,7 +55,6 @@ function sucheKreis () {
 input.onButtonPressed(Button.A, function () {
     fahren = 1
     Zeit = 500
-    status = 0
     kreisTimer = 75
     drehenTimer = 35
     drehenTimer90Grad = 20
@@ -76,9 +86,10 @@ let fahren = 0
 let kreisTimer = 0
 let verlassenTimer = 0
 let drehenTimer90Grad = 0
-let status = 0
 let drehenTimer = 0
 let Zeit = 0
+let status = 0
+status = 0
 let GegenstandImWeg = 0
 Zeit = 500
 basic.forever(function () {
@@ -90,6 +101,8 @@ basic.forever(function () {
             sucheKreis()
         } else if (status == 2) {
             drehen()
+        } else if (status == 3) {
+            weißSuchen()
         }
     }
     if (callibot.entfernung(KEinheit.cm) < 15) {
