@@ -1,12 +1,12 @@
 function weißSuchen () {
-    if (drehenTimer == 0) {
-        callibot.motor(KMotor.beide, KDir.vorwärts, 0)
-    } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-        status = 0
-    } else {
-        drehenTimer += -1
-        callibot.motor(KMotor.rechts, KDir.rückwärts, 30)
-        callibot.motor(KMotor.links, KDir.vorwärts, 30)
+    callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
+    callibot.motor(KMotor.links, KDir.rückwärts, 25)
+    drehenTimer += -1
+    if (drehenTimer <= 0) {
+        callibot.motor(KMotor.beide, KDir.vorwärts, 25)
+        if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
+            status = 0
+        }
     }
 }
 function drehen () {
@@ -31,6 +31,7 @@ function verlassen () {
             verlassenTimer += -1
         } else if (verlassenTimer <= 0) {
             callibot.motorStop(KMotor.beide, KStop.Bremsen)
+            status = 3
         }
     }
 }
@@ -109,6 +110,7 @@ basic.forever(function () {
         status = 2
     }
     if (Zeit <= 0) {
+        fahren = 0
         verlassen()
     }
 })
