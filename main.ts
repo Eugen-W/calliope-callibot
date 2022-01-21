@@ -58,13 +58,13 @@ function weiß_suchen () {
     if (drehenTimer <= 0) {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
         if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-            status = 0
+            status = "KreisSuchen"
         }
     }
 }
 function kreis_suchen () {
     if (SucheBewegung == false) {
-        sucheZeit = randint(10, 60)
+        sucheZeit = randint(10, 100)
         if (Richtung == "vorne") {
             Richtung = "hinten"
         } else {
@@ -83,7 +83,7 @@ function kreis_suchen () {
         SucheBewegung = false
     }
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        status = 1
+        status = "KreisBetreten"
     }
 }
 input.onButtonPressed(Button.B, function () {
@@ -132,6 +132,8 @@ basic.forever(function () {
             drehen()
         } else if (status == "WeißSuchen") {
             weiß_suchen()
+        } else if (status == "KreisBetreten") {
+            kreis_betreten()
         }
     }
     if (callibot.entfernung(KEinheit.cm) < 15) {
