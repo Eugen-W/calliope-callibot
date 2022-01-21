@@ -42,10 +42,10 @@ function sucheKreis () {
         callibot.motorStop(KMotor.links, KStop.Bremsen)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-    } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         kreisTimer += -1
-        callibot.motor(KMotor.links, KDir.vorwärts, 25)
-        callibot.motorStop(KMotor.rechts, KStop.Bremsen)
+    } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
+        callibot.motor(KMotor.beide, KDir.rückwärts, 25)
+        kreisTimer += -1
     } else {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
     }
