@@ -1,6 +1,6 @@
 function weißSuchen () {
-    callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
-    callibot.motor(KMotor.links, KDir.rückwärts, 25)
+    callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
+    callibot.motor(KMotor.links, KDir.rückwärts, 50)
     drehenTimer += -1
     if (drehenTimer <= 0) {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
