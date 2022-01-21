@@ -45,3 +45,7 @@ Timer der ab Knopfdruck von A läuft. Bei 0 ist der Timer abgelaufen und der Rob
 Wenn kreisgefunden auf 1 ist, beudeutet es, dass der Roboter sich endgültig auf dem Kreis befindet.
 ### kreisTimer
 Ein Timer, der startet, wenn die Sensoren auf einer dunklen Fläche sind. Wenn der Timer 0 ist, ist er abgelaufen.
+
+## Ideen für weitere Funktionen des Calli Bots
+### Den Bot zu musik tanzen lassen
+### Den Bot koordinaten geben können zu denen er dann fährt auf der Plane
