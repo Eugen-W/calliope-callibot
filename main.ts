@@ -109,10 +109,10 @@ function kreis_fahren () {
         callibot.motor(KMotor.beide, KDir.vorwärts, 50)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         callibot.motor(KMotor.links, KDir.vorwärts, 50)
-        callibot.motorStop(KMotor.rechts, KStop.Bremsen)
+        callibot.motorStop(KMotor.rechts, KStop.Frei)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
-        callibot.motorStop(KMotor.links, KStop.Bremsen)
+        callibot.motorStop(KMotor.links, KStop.Frei)
     }
 }
 let KreisGefunden = false
