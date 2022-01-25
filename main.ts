@@ -11,6 +11,7 @@ let GegenstandImWeg = 0
 let Status: string  = "KreisAusrichtung"
 let Ausgang: string
 let Richtung: string
+let EingangRichtung: string
 
 function drehen () {
     DrehenTimer180Grad += -1
@@ -84,8 +85,15 @@ input.onButtonPressed(Button.A, function () {
 function kreis_betreten () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         KreisTimer += -1
-        callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
-        callibot.motorStop(KMotor.links, KStop.Bremsen)
+        if (EingangRichtung == "rechts") {
+            callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
+            callibot.motorStop(KMotor.links, KStop.Bremsen)
+        }
+        else if (EingangRichtung == "links") {
+            callibot.motor(KMotor.links, KDir.vorwärts, 25)
+            callibot.motorStop(KMotor.rechts, KStop.Bremsen)  
+        }
+        
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
         KreisTimer += -1
@@ -121,6 +129,12 @@ function kreis_suchen () {
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         KreisGefunden = true
     } else {
+        if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
+            EingangRichtung = "links"
+        }
+        else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
+            EingangRichtung = "rechts"
+        }
         vor_zurück_fahren()
     }
 }
