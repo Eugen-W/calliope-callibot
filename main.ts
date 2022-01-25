@@ -1,3 +1,17 @@
+let KreisGefunden: boolean = false
+let SucheBewegung: boolean = false
+let Fahren: boolean
+let KreisTimer: number
+let SucheZeit: number
+let VerlassenTimer: number
+let DrehenTimer90Grad: number
+let DrehenTimer180Grad: number
+let Zeit: number = 500
+let GegenstandImWeg = 0
+let Status: string  = "KreisAusrichtung"
+let Ausgang: string
+let Richtung: string
+
 function drehen () {
     DrehenTimer180Grad += -1
     callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
@@ -58,7 +72,7 @@ function kreis_ausrichtung () {
     }
 }
 input.onButtonPressed(Button.A, function () {
-    Fahren = 1
+    Fahren = true
     Zeit = 500
     KreisTimer = 50
     DrehenTimer180Grad = 35
@@ -111,7 +125,7 @@ function kreis_suchen () {
     }
 }
 input.onButtonPressed(Button.B, function () {
-    Fahren = 0
+    Fahren = false
 })
 function kreis_fahren () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
@@ -126,24 +140,10 @@ function kreis_fahren () {
         Ausgang = "rechts"
     }
 }
-let KreisGefunden = false
-let KreisTimer = 0
-let Fahren = 0
-let Richtung = ""
-let SucheZeit = 0
-let SucheBewegung = false
-let Ausgang = ""
-let VerlassenTimer = 0
-let DrehenTimer90Grad = 0
-let DrehenTimer180Grad = 0
-let Zeit = 0
-let Status = ""
-Status = "KreisAusrichtung"
-let GegenstandImWeg = 0
-Zeit = 500
+
 basic.forever(function () {
     Zeit += -1
-    if (Zeit > 0 && Fahren == 1) {
+    if (Zeit > 0 && Fahren == true) {
         if (Status == "KreisFahren") {
             kreis_fahren()
         } else if (Status == "KreisSuchen") {
@@ -162,7 +162,7 @@ basic.forever(function () {
         Status = "Drehen"
     }
     if (Zeit <= 0) {
-        Fahren = 0
+        Fahren = false
         verlassen()
     }
     test()
