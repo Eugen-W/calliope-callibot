@@ -179,5 +179,4 @@ basic.forever(function () {
         Fahren = false
         verlassen()
     }
-    test()
 })
