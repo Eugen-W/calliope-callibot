@@ -11,7 +11,7 @@ let GegenstandImWeg = 0
 let Status: string  = "KreisAusrichtung"
 let Ausgang: string
 let Richtung: string
-let EingangRichtung: string
+let EingangRichtung: string = "rechts"
 
 function drehen () {
     DrehenTimer180Grad += -1
@@ -83,6 +83,7 @@ input.onButtonPressed(Button.A, function () {
     KreisGefunden = false
 })
 function kreis_betreten () {
+    callibot.setRgbLed(KRgbLed.All, KRgbColor.rot, 8)
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         KreisTimer += -1
         if (EingangRichtung == "rechts") {
