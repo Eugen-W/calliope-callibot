@@ -85,7 +85,7 @@ function kreis_ausrichtung () {
 }
 function kreis_betreten () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        KreisTimer += -1
+        KreisTimer -= 1
         if (EingangRichtung == "rechts") {
             callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
             callibot.motorStop(KMotor.links, KStop.Bremsen)
@@ -97,10 +97,10 @@ function kreis_betreten () {
         
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-        KreisTimer += -1
+        KreisTimer -= 1
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-        KreisTimer += -1
+        KreisTimer -= 1
     }
     if (KreisTimer == 0) {
         Status = "KreisFahren"
