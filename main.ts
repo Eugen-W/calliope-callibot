@@ -15,19 +15,20 @@ let EingangRichtung: string = "rechts"
 
 input.onButtonPressed(Button.A, function () {
     neustart()
+    
 })
 input.onButtonPressed(Button.B, function () {
-    callibot.setRgbLed(KRgbLed.All, KRgbColor.grün, 8)
+    callibot.motorStop(KMotor.beide, KStop.Bremsen)
     Fahren = false
 })
 function neustart() {
     Fahren = true
     Zeit = 500
     KreisTimer = 50
-    DrehenTimer180Grad = 35
-    DrehenTimer90Grad = 20
+    DrehenTimer180Grad = 20
+    DrehenTimer90Grad = 15
     NeustartTimer = 50
-    VerlassenTimer = 50
+    VerlassenTimer = 35
     KreisGefunden = false
     Status = "KreisAusrichtung"
 }
@@ -46,6 +47,7 @@ function verlassen () {
     } else {
         if (DrehenTimer90Grad > 0) {
             DrehenTimer90Grad -= 1
+            
             if (Ausgang == "links") {
                 callibot.motor(KMotor.links, KDir.vorwärts, 50)
                 callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
@@ -70,8 +72,7 @@ function zurückdrehen() {
         callibot.motor(KMotor.links, KDir.vorwärts, 50)
         callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
     }
-    if (DrehenTimer180Grad <= 0) {
-        callibot.setRgbLed(KRgbLed.All, KRgbColor.rot, 8)
+    if (DrehenTimer180Grad <= 0) {  
         neustart()
     }
 }
@@ -116,14 +117,7 @@ function weiß_suchen () {
             Status = "KreisAusrichtung"
         }
     }
-}
-function test () {
-    if (Status == "KreisFahren") {
-        callibot.setLed(KMotor.beide, KState.an)
-    } else {
-        callibot.setLed(KMotor.beide, KState.aus)
-    }
-}
+} 
 function kreis_suchen () {
     if (KreisGefunden == true) {
         kreis_betreten()
@@ -171,17 +165,13 @@ basic.forever(function () {
         } else if (Status == "KreisAusrichtung") {
             kreis_ausrichtung()
         }
+    }
     if (Zeit <= 0) {
         Fahren = false
         verlassen()
     }
-    if (Fahren == false) {
-        callibot.motorStop(KMotor.beide, KStop.Frei)
-        
-    }
     if (callibot.entfernung(KEinheit.cm) < 15) {
         Status = "Drehen"
-    }
     }
 })
 
