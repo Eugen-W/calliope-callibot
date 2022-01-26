@@ -17,6 +17,7 @@ input.onButtonPressed(Button.A, function () {
     neustart()
 })
 input.onButtonPressed(Button.B, function () {
+    callibot.setRgbLed(KRgbLed.All, KRgbColor.grün, 8)
     Fahren = false
 })
 function neustart() {
@@ -170,13 +171,17 @@ basic.forever(function () {
         } else if (Status == "KreisAusrichtung") {
             kreis_ausrichtung()
         }
+    if (Zeit <= 0) {
+        Fahren = false
+        verlassen()
+    }
+    if (Fahren == false) {
+        callibot.motorStop(KMotor.beide, KStop.Frei)
+        
     }
     if (callibot.entfernung(KEinheit.cm) < 15) {
         Status = "Drehen"
     }
-    if (Zeit <= 0) {
-        Fahren = false
-        verlassen()
     }
 })
 
