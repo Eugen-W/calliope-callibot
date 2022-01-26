@@ -7,13 +7,23 @@ let VerlassenTimer: number
 let DrehenTimer90Grad: number
 let DrehenTimer180Grad: number
 let NeustartTimer: number
-let Zeit: number = 500
+let Zeit: number
 let GegenstandImWeg = 0
 let Status: string  = "KreisAusrichtung"
 let Ausgang: string
 let EingangRichtung: string = "rechts"
 
-callibot.setRgbLed(KRgbLed.All, KRgbColor.rot, 8)
+input.onButtonPressed(Button.A, function () {
+    Fahren = true
+    Zeit = 500
+    KreisTimer = 50
+    DrehenTimer180Grad = 35
+    DrehenTimer90Grad = 20
+    NeustartTimer = 50
+    VerlassenTimer = 50
+    KreisGefunden = false
+})
+
 
 function drehen () {
     DrehenTimer180Grad += -1
@@ -24,6 +34,7 @@ function drehen () {
         DrehenTimer180Grad = 35
     }
 }
+
 function verlassen () {
     if (callibot.entfernung(KEinheit.cm) < 15) {
         callibot.motorStop(KMotor.beide, KStop.Bremsen)
@@ -54,6 +65,7 @@ function zurückdrehen() {
         DrehenTimer180Grad -= 1
         if (DrehenTimer180Grad <= 0) {
             Status = "KreisAusrichtung"
+        }
     }
 }
 
@@ -65,17 +77,6 @@ function kreis_ausrichtung () {
         // Status = "KreisAusrichtung"
     }
 }
-input.onButtonPressed(Button.A, function () {
-
-    Fahren = true
-    Zeit = 500
-    KreisTimer = 50
-    DrehenTimer180Grad = 35
-    DrehenTimer90Grad = 20
-    NeustartTimer = 50
-    VerlassenTimer = 50
-    KreisGefunden = false
-})
 function kreis_betreten () {
     callibot.setRgbLed(KRgbLed.All, KRgbColor.rot, 8)
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
@@ -152,7 +153,7 @@ function kreis_fahren () {
     }
 }
 basic.forever(function () {
-
+    callibot.setRgbLed(KRgbLed.All, KRgbColor.rot, 8)
     Zeit += -1
     if (Zeit > 0 && Fahren == true) {
         if (Status == "KreisFahren") {
@@ -177,4 +178,4 @@ basic.forever(function () {
         verlassen()
     }
 })
-}
+
