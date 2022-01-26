@@ -81,7 +81,6 @@ function kreis_ausrichtung () {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
     } else {
         Status = "KreisSuchen"
-        // Status = "KreisAusrichtung"
     }
 }
 function kreis_betreten () {
@@ -107,17 +106,6 @@ function kreis_betreten () {
         Status = "KreisFahren"
     }
 }
-function weiß_suchen () {
-    callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
-    callibot.motor(KMotor.links, KDir.rückwärts, 50)
-    DrehenTimer180Grad += -1
-    if (DrehenTimer180Grad <= 0) {
-        callibot.motor(KMotor.beide, KDir.vorwärts, 25)
-        if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-            Status = "KreisAusrichtung"
-        }
-    }
-} 
 function kreis_suchen () {
     if (KreisGefunden == true) {
         kreis_betreten()
@@ -158,8 +146,6 @@ basic.forever(function () {
             kreis_suchen()
         } else if (Status == "Drehen") {
             drehen()
-        } else if (Status == "WeißSuchen") {
-            weiß_suchen()
         } else if (Status == "KreisBetreten") {
             kreis_betreten()
         } else if (Status == "KreisAusrichtung") {
