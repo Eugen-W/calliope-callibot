@@ -1,3 +1,37 @@
+let KreisGefunden: boolean = false
+let SucheBewegung: boolean = false
+let Fahren: boolean
+let KreisTimer: number
+let SucheZeit: number
+let VerlassenTimer: number
+let DrehenTimer90Grad: number
+let DrehenTimer180Grad: number
+let NeustartTimer: number
+let Zeit: number
+let GegenstandImWeg = 0
+let Status: string
+let Ausgang: string
+let EingangRichtung: string = "rechts"
+
+input.onButtonPressed(Button.A, function () {
+    neustart()
+    
+})
+input.onButtonPressed(Button.B, function () {
+    callibot.motorStop(KMotor.beide, KStop.Bremsen)
+    Fahren = false
+})
+function neustart() {
+    Fahren = true
+    Zeit = 500
+    KreisTimer = 50
+    DrehenTimer180Grad = 20
+    DrehenTimer90Grad = 15
+    NeustartTimer = 50
+    VerlassenTimer = 35
+    KreisGefunden = false
+    Status = "KreisAusrichtung"
+}
 function drehen () {
     DrehenTimer180Grad += -1
     callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
@@ -12,6 +46,8 @@ function verlassen () {
         callibot.motorStop(KMotor.beide, KStop.Bremsen)
     } else {
         if (DrehenTimer90Grad > 0) {
+            DrehenTimer90Grad -= 1
+            
             if (Ausgang == "links") {
                 callibot.motor(KMotor.links, KDir.vorwärts, 50)
                 callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
@@ -19,35 +55,25 @@ function verlassen () {
                 callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
                 callibot.motor(KMotor.links, KDir.rückwärts, 50)
             }
-            DrehenTimer90Grad += -1
         } else if (VerlassenTimer > 0) {
             callibot.motor(KMotor.beide, KDir.vorwärts, 25)
-            VerlassenTimer += -1
+            VerlassenTimer -= 1
         } else if (VerlassenTimer <= 0) {
-            callibot.motorStop(KMotor.beide, KStop.Bremsen)
-            Status = "WeißSuchen"
+            zurückdrehen()
         }
     }
 }
-function vor_zurück_fahren () {
-    if (SucheBewegung == false) {
-        SucheZeit = randint(10, 100)
-        if (Richtung == "vorne") {
-            Richtung = "hinten"
-        } else {
-            Richtung = "vorne"
-        }
-        SucheBewegung = true
+function zurückdrehen() {
+    if (NeustartTimer >= 0) {
+        callibot.motorStop(KMotor.beide, KStop.Bremsen)
+        NeustartTimer -= 1
     } else {
-        SucheZeit += -1
-        if (Richtung == "vorne") {
-            callibot.motor(KMotor.beide, KDir.vorwärts, 25)
-        } else {
-            callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-        }
+        DrehenTimer180Grad -= 1
+        callibot.motor(KMotor.links, KDir.vorwärts, 50)
+        callibot.motor(KMotor.rechts, KDir.rückwärts, 50)
     }
-    if (SucheZeit == 0) {
-        SucheBewegung = false
+    if (DrehenTimer180Grad <= 0) {  
+        neustart()
     }
 }
 function kreis_ausrichtung () {
@@ -55,23 +81,21 @@ function kreis_ausrichtung () {
         callibot.motor(KMotor.beide, KDir.vorwärts, 25)
     } else {
         Status = "KreisSuchen"
+        // Status = "KreisAusrichtung"
     }
 }
-input.onButtonPressed(Button.A, function () {
-    Fahren = 1
-    Zeit = 500
-    KreisTimer = 50
-    DrehenTimer180Grad = 35
-    DrehenTimer90Grad = 20
-    VerlassenTimer = 50
-    Richtung = "hinten"
-    KreisGefunden = false
-})
 function kreis_betreten () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         KreisTimer += -1
-        callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
-        callibot.motorStop(KMotor.links, KStop.Bremsen)
+        if (EingangRichtung == "rechts") {
+            callibot.motor(KMotor.rechts, KDir.vorwärts, 25)
+            callibot.motorStop(KMotor.links, KStop.Bremsen)
+        }
+        else if (EingangRichtung == "links") {
+            callibot.motor(KMotor.links, KDir.vorwärts, 25)
+            callibot.motorStop(KMotor.rechts, KStop.Bremsen)  
+        }
+        
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
         KreisTimer += -1
@@ -93,26 +117,25 @@ function weiß_suchen () {
             Status = "KreisAusrichtung"
         }
     }
-}
-function test () {
-    if (Status == "KreisFahren") {
-        callibot.setLed(KMotor.beide, KState.an)
-    } else {
-        callibot.setLed(KMotor.beide, KState.aus)
-    }
-}
+} 
 function kreis_suchen () {
     if (KreisGefunden == true) {
         kreis_betreten()
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         KreisGefunden = true
     } else {
-        vor_zurück_fahren()
+        if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
+            EingangRichtung = "links"
+        }
+        else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
+            EingangRichtung = "rechts"
+        }
+        callibot.motor(KMotor.beide, KDir.vorwärts, 25)
     }
 }
-input.onButtonPressed(Button.B, function () {
-    Fahren = 0
-})
+
+
+
 function kreis_fahren () {
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         callibot.motor(KMotor.beide, KDir.vorwärts, 50)
@@ -126,24 +149,9 @@ function kreis_fahren () {
         Ausgang = "rechts"
     }
 }
-let KreisGefunden = false
-let KreisTimer = 0
-let Fahren = 0
-let Richtung = ""
-let SucheZeit = 0
-let SucheBewegung = false
-let Ausgang = ""
-let VerlassenTimer = 0
-let DrehenTimer90Grad = 0
-let DrehenTimer180Grad = 0
-let Zeit = 0
-let Status = ""
-Status = "KreisAusrichtung"
-let GegenstandImWeg = 0
-Zeit = 500
 basic.forever(function () {
     Zeit += -1
-    if (Zeit > 0 && Fahren == 1) {
+    if (Zeit > 0 && Fahren == true) {
         if (Status == "KreisFahren") {
             kreis_fahren()
         } else if (Status == "KreisSuchen") {
@@ -158,12 +166,12 @@ basic.forever(function () {
             kreis_ausrichtung()
         }
     }
+    if (Zeit <= 0) {
+        Fahren = false
+        verlassen()
+    }
     if (callibot.entfernung(KEinheit.cm) < 15) {
         Status = "Drehen"
     }
-    if (Zeit <= 0) {
-        Fahren = 0
-        verlassen()
-    }
-    test()
 })
+
