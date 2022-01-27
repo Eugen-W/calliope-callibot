@@ -8,6 +8,8 @@ let DrehenTimer90Grad: number
 let DrehenTimer180Grad: number
 let NeustartTimer: number
 let Zeit: number
+let KreisGeschwindigkeit: number
+let BeschleunigungsTimer: number
 let GegenstandImWeg = 0
 let Status: string
 let Ausgang: string
@@ -24,6 +26,8 @@ input.onButtonPressed(Button.B, function () {
 function neustart() {
     Fahren = true
     Zeit = 500
+    KreisGeschwindigkeit = 25
+    BeschleunigungsTimer = 10
     KreisTimer = 30
     DrehenTimer180Grad = 30
     DrehenTimer90Grad = 15
@@ -121,24 +125,42 @@ function kreis_suchen () {
 
 
 
-function kreis_fahren () {
+function kreis_fahren (BeschleunigungsMultiplikator: number) {
     Zeit -= 1
+    beschleunigung(BeschleunigungsMultiplikator)
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.beide, KDir.vorwärts, 50)
+        callibot.motor(KMotor.beide, KDir.vorwärts, KreisGeschwindigkeit)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.links, KDir.vorwärts, 50)
+        callibot.motor(KMotor.links, KDir.vorwärts, KreisGeschwindigkeit)
         callibot.motorStop(KMotor.rechts, KStop.Frei)
         Ausgang = "links"
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-        callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
+        callibot.motor(KMotor.rechts, KDir.vorwärts, KreisGeschwindigkeit)
         callibot.motorStop(KMotor.links, KStop.Frei)
         Ausgang = "rechts"
+    }
+}
+
+function beschleunigung(BeschleunigungsMultiplikator: number) {
+    if (BeschleunigungsMultiplikator > 0) {
+        if (KreisGeschwindigkeit < 100) {
+            BeschleunigungsTimer -= 1   
+        }
+    }
+    else {
+        if (KreisGeschwindigkeit > 0) {
+            BeschleunigungsTimer -= 1
+        }
+    }
+    if (BeschleunigungsTimer <= 0) {
+            KreisGeschwindigkeit += 2 * BeschleunigungsMultiplikator
+            BeschleunigungsTimer = 10
     }
 }
 basic.forever(function () {
     if (Zeit > 0 && Fahren == true) {
         if (Status == "KreisFahren") {
-            kreis_fahren()
+            kreis_fahren(1)
         } else if (Status == "KreisSuchen") {
             kreis_suchen()
         } else if (Status == "Drehen") {
@@ -150,8 +172,14 @@ basic.forever(function () {
         }
     }
     if (Zeit <= 0) {
-        Fahren = false
-        verlassen()
+        if (KreisGeschwindigkeit > 0) {
+            kreis_fahren(-1)
+        }
+        else {
+            Fahren = false
+            verlassen()
+        }
+        
     }
     if (callibot.entfernung(KEinheit.cm) < 15) {
         Status = "Drehen"
