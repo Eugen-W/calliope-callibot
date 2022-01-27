@@ -10,6 +10,7 @@ let NeustartTimer: number
 let Zeit: number
 let KreisGeschwindigkeit: number
 let BeschleunigungsTimer: number
+let TaktTimer: number
 let GegenstandImWeg = 0
 let Status: string
 let Ausgang: string
@@ -23,6 +24,25 @@ input.onButtonPressed(Button.B, function () {
     callibot.motorStop(KMotor.beide, KStop.Bremsen)
     Fahren = false
 })
+input.onButtonPressed(Button.AB, function () {
+    Status = "Tanzen"
+})
+function tanzen(TimerLänge: number) {
+    
+    if (TaktTimer > 0) {
+        
+        TaktTimer -= 1
+        if (TaktTimer >= TimerLänge / 2) {
+            callibot.motor(KMotor.beide, KDir.vorwärts, 25)
+        }
+        else {
+            callibot.motorStop(KMotor.beide, KStop.Bremsen)
+        }
+    }
+    else {
+        TaktTimer = TimerLänge
+    }
+}
 function neustart() {
     Fahren = true
     Zeit = 500
@@ -184,5 +204,8 @@ basic.forever(function () {
     if (callibot.entfernung(KEinheit.cm) < 15) {
         Status = "Drehen"
     }
+    if (Status == "Tanzen") {
+        basic.showNumber(2)
+        tanzen(TaktTimer)
+    }
 })
-
