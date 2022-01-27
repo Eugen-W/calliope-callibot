@@ -25,7 +25,7 @@ function neustart() {
     Fahren = true
     Zeit = 500
     KreisTimer = 30
-    DrehenTimer180Grad = 20
+    DrehenTimer180Grad = 30
     DrehenTimer90Grad = 15
     NeustartTimer = 50
     VerlassenTimer = 35
@@ -94,13 +94,10 @@ function kreis_betreten () {
             callibot.motor(KMotor.links, KDir.vorwärts, 25)
             callibot.motorStop(KMotor.rechts, KStop.Bremsen)  
         }
-        
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-        KreisTimer -= 1
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         callibot.motor(KMotor.beide, KDir.rückwärts, 25)
-        KreisTimer -= 1
     }
     if (KreisTimer == 0) {
         Status = "KreisFahren"
@@ -125,6 +122,7 @@ function kreis_suchen () {
 
 
 function kreis_fahren () {
+    Zeit -= 1
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
         callibot.motor(KMotor.beide, KDir.vorwärts, 50)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
@@ -138,7 +136,6 @@ function kreis_fahren () {
     }
 }
 basic.forever(function () {
-    Zeit += -1
     if (Zeit > 0 && Fahren == true) {
         if (Status == "KreisFahren") {
             kreis_fahren()
