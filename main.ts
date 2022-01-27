@@ -24,7 +24,7 @@ input.onButtonPressed(Button.B, function () {
 function neustart() {
     Fahren = true
     Zeit = 500
-    KreisTimer = 50
+    KreisTimer = 30
     DrehenTimer180Grad = 20
     DrehenTimer90Grad = 15
     NeustartTimer = 50
