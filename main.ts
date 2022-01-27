@@ -8,6 +8,8 @@ let DrehenTimer90Grad: number
 let DrehenTimer180Grad: number
 let NeustartTimer: number
 let Zeit: number
+let KreisGeschwindigkeit: number
+let BeschleunigungsTimer: number
 let GegenstandImWeg = 0
 let Status: string
 let Ausgang: string
@@ -24,6 +26,8 @@ input.onButtonPressed(Button.B, function () {
 function neustart() {
     Fahren = true
     Zeit = 500
+    KreisGeschwindigkeit = 20
+    BeschleunigungsTimer = 10
     KreisTimer = 30
     DrehenTimer180Grad = 30
     DrehenTimer90Grad = 15
@@ -123,14 +127,21 @@ function kreis_suchen () {
 
 function kreis_fahren () {
     Zeit -= 1
+    if (KreisGeschwindigkeit < 100) {
+        BeschleunigungsTimer -=1
+        if (BeschleunigungsTimer <= 0) {
+            KreisGeschwindigkeit += 5
+            BeschleunigungsTimer = 10
+        }
+    }
     if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.beide, KDir.vorwärts, 50)
+        callibot.motor(KMotor.beide, KDir.vorwärts, KreisGeschwindigkeit)
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.hell) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.dunkel)) {
-        callibot.motor(KMotor.links, KDir.vorwärts, 50)
+        callibot.motor(KMotor.links, KDir.vorwärts, KreisGeschwindigkeit)
         callibot.motorStop(KMotor.rechts, KStop.Frei)
         Ausgang = "links"
     } else if (callibot.readLineSensor(KSensor.links, KSensorStatus.dunkel) && callibot.readLineSensor(KSensor.rechts, KSensorStatus.hell)) {
-        callibot.motor(KMotor.rechts, KDir.vorwärts, 50)
+        callibot.motor(KMotor.rechts, KDir.vorwärts, KreisGeschwindigkeit)
         callibot.motorStop(KMotor.links, KStop.Frei)
         Ausgang = "rechts"
     }
