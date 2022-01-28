@@ -1,16 +1,18 @@
+const TANZ_TIMER_LÄNGE = 50
 let KreisGefunden: boolean = false
 let SucheBewegung: boolean = false
 let Fahren: boolean
 let KreisTimer: number
 let SucheZeit: number
 let VerlassenTimer: number
-let DrehenTimer90Grad: number
-let DrehenTimer180Grad: number
+let DrehenTimer90Grad: number = 15
+let DrehenTimer180Grad: number =  30
 let NeustartTimer: number
 let Zeit: number
 let KreisGeschwindigkeit: number
 let BeschleunigungsTimer: number
-let TaktTimer: number
+let TaktTimer: number = TANZ_TIMER_LÄNGE
+let Schritt = 1
 let GegenstandImWeg = 0
 let Status: string
 let Ausgang: string
@@ -18,7 +20,6 @@ let EingangRichtung: string = "rechts"
 
 input.onButtonPressed(Button.A, function () {
     neustart()
-    
 })
 input.onButtonPressed(Button.B, function () {
     callibot.motorStop(KMotor.beide, KStop.Bremsen)
@@ -27,20 +28,31 @@ input.onButtonPressed(Button.B, function () {
 input.onButtonPressed(Button.AB, function () {
     Status = "Tanzen"
 })
-function tanzen(TimerLänge: number) {
-    
+function tanzen() {
+    const MAXIMALE_SCHRITTE = 3
     if (TaktTimer > 0) {
-        
         TaktTimer -= 1
-        if (TaktTimer >= TimerLänge / 2) {
-            callibot.motor(KMotor.beide, KDir.vorwärts, 25)
+        if (TaktTimer >= TANZ_TIMER_LÄNGE / 2 && DrehenTimer180Grad > 0) {
+            if (Schritt == 1 || Schritt == 2) {
+                callibot.motor(KMotor.beide, KDir.vorwärts, 25)
+            }
+            else {
+                callibot.motor(KMotor.links, KDir.vorwärts, 100)
+                callibot.motor(KMotor.rechts, KDir.rückwärts, 100)
+                DrehenTimer180Grad -= 1
+            }
         }
         else {
             callibot.motorStop(KMotor.beide, KStop.Bremsen)
         }
     }
     else {
-        TaktTimer = TimerLänge
+        Schritt += 1
+        DrehenTimer180Grad = 30
+        TaktTimer = TANZ_TIMER_LÄNGE
+    }
+    if (Schritt > MAXIMALE_SCHRITTE) {
+        Schritt = 1
     }
 }
 function neustart() {
@@ -178,34 +190,35 @@ function beschleunigung(BeschleunigungsMultiplikator: number) {
     }
 }
 basic.forever(function () {
-    if (Zeit > 0 && Fahren == true) {
-        if (Status == "KreisFahren") {
-            kreis_fahren(1)
-        } else if (Status == "KreisSuchen") {
-            kreis_suchen()
-        } else if (Status == "Drehen") {
-            drehen()
-        } else if (Status == "KreisBetreten") {
-            kreis_betreten()
-        } else if (Status == "KreisAusrichtung") {
-            kreis_ausrichtung()
-        }
-    }
-    if (Zeit <= 0) {
-        if (KreisGeschwindigkeit > 0) {
-            kreis_fahren(-1)
-        }
-        else {
-            Fahren = false
-            verlassen()
-        }
-        
-    }
-    if (callibot.entfernung(KEinheit.cm) < 15) {
-        Status = "Drehen"
-    }
     if (Status == "Tanzen") {
-        basic.showNumber(2)
-        tanzen(TaktTimer)
+        tanzen()
+    }
+    else {
+
+        if (Zeit > 0 && Fahren == true) {
+            if (Status == "KreisFahren") {
+                kreis_fahren(1)
+            } else if (Status == "KreisSuchen") {
+                kreis_suchen()
+            } else if (Status == "Drehen") {
+                drehen()
+            } else if (Status == "KreisBetreten") {
+                kreis_betreten()
+            } else if (Status == "KreisAusrichtung") {
+                kreis_ausrichtung()
+            }
+        }
+        if (Zeit <= 0) {
+            if (KreisGeschwindigkeit > 0) {
+                kreis_fahren(-1)
+            }
+            else {
+                Fahren = false
+                verlassen()
+            }  
+        }
+        if (callibot.entfernung(KEinheit.cm) < 15) {
+            Status = "Drehen"
+        }
     }
 })
