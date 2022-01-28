@@ -31,6 +31,7 @@ input.onButtonPressed(Button.AB, function () {
 })
 function tanzen() {
     const MAXIMALE_SCHRITTE = 7
+    
     if (TaktTimer > 0) {
         TaktTimer -= 1
         if (TaktTimer >= TANZ_TIMER_LÄNGE / 2 && DrehenTimer180Grad > 0) {
@@ -60,6 +61,11 @@ function tanzen() {
     if (Schritt > MAXIMALE_SCHRITTE) {
         Schritt = 1
     }
+}
+function musik() {
+    music.playMelody(music.melodyEditor("C3 E3 G3 - C3 E3 G3 -"), 120)
+    music.playMelody(music.melodyEditor("F3 A3 C4 - F3 A3 C4 -"), 120)
+    music.playMelody(music.melodyEditor("D3 F3 A 3- D3 F3 A3 -"), 120)
 }
 function neustart() {
     Fahren = true
@@ -196,6 +202,7 @@ function beschleunigung(BeschleunigungsMultiplikator: number) {
     }
 }
 basic.forever(function () {
+    //musik()
     if (Status == "Tanzen") {
         tanzen()
     }
