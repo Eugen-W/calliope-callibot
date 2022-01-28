@@ -1,4 +1,4 @@
-const TANZ_TIMER_LÄNGE = 50
+const TANZ_TIMER_LÄNGE = 55
 let KreisGefunden: boolean = false
 let SucheBewegung: boolean = false
 let Fahren: boolean
@@ -27,19 +27,25 @@ input.onButtonPressed(Button.B, function () {
 })
 input.onButtonPressed(Button.AB, function () {
     Status = "Tanzen"
+    DrehenTimer180Grad = 50
 })
 function tanzen() {
-    const MAXIMALE_SCHRITTE = 3
+    const MAXIMALE_SCHRITTE = 7
     if (TaktTimer > 0) {
         TaktTimer -= 1
         if (TaktTimer >= TANZ_TIMER_LÄNGE / 2 && DrehenTimer180Grad > 0) {
-            if (Schritt == 1 || Schritt == 2) {
+            if (Schritt < 3 || Schritt > 3 && Schritt < 6 ) {
                 callibot.motor(KMotor.beide, KDir.vorwärts, 25)
             }
-            else {
+            else if (Schritt == 3 ) {
                 callibot.motor(KMotor.links, KDir.vorwärts, 100)
                 callibot.motor(KMotor.rechts, KDir.rückwärts, 100)
                 DrehenTimer180Grad -= 1
+            }
+            else if (Schritt == 6 || Schritt == 7 ) {
+                callibot.motor(KMotor.links, KDir.vorwärts, 100)
+                callibot.motorStop(KMotor.rechts, KStop.Frei)
+              
             }
         }
         else {
